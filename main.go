@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	chart "github.com/wcharczuk/go-chart/v2"
@@ -113,7 +114,7 @@ func GetChartSeries(dashboard Dashboard) []chart.Series {
 	return []chart.Series{hashrates, reportedHashrates}
 }
 
-func GetGraph(dashboard Dashboard) *bytes.Buffer {
+func GetGraph(dashboard Dashboard) *bytes.Reader {
 	graph := chart.Chart{
 		Width:  900,
 		Height: 200,
@@ -153,7 +154,7 @@ func GetGraph(dashboard Dashboard) *bytes.Buffer {
 	if err != nil {
 		panic(err)
 	}
-	return buff
+	return bytes.NewReader(buff.Bytes())
 }
 
 func main() {
@@ -167,23 +168,25 @@ func main() {
 	address := flag.Arg(0)
 
 	if address == "" {
-		panic("no address given")
+		fmt.Println("no address given")
+		os.Exit(0)
 	}
 
-	for {
+	dashboard, err := GetDashboard(address)
 
-		dashboard, err := GetDashboard(address)
-
-		if err != nil {
-			panic(err)
-		}
-
-		fmt.Printf("%v\n", address)
-		fmt.Printf("%.0f / %d workers running\n", dashboard.Data.CurrentStatistics.ActiveWorkers, len(dashboard.Data.Workers))
-		fmt.Printf("%f ETH unpaid\n", WeiToEther(dashboard.Data.CurrentStatistics.Unpaid))
-		fmt.Printf("%f MH/S\n", HashrateToMhs(dashboard.Data.CurrentStatistics.CurrentHashrate))
-
-		time.Sleep(time.Duration(interval) * time.Minute)
+	if err != nil {
+		panic(err)
 	}
+
+	fmt.Printf("%v\n", address)
+	fmt.Printf("%.0f / %d workers running\n", dashboard.Data.CurrentStatistics.ActiveWorkers, len(dashboard.Data.Workers))
+	fmt.Printf("%f ETH unpaid\n", WeiToEther(dashboard.Data.CurrentStatistics.Unpaid))
+	fmt.Printf("%f MH/S\n", HashrateToMhs(dashboard.Data.CurrentStatistics.CurrentHashrate))
+
+	body := GetGraph(dashboard)
+
+	PostWebhook(dashboard, body)
+
+	// time.Sleep(time.Duration(interval) * time.Minute)
 
 }
