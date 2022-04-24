@@ -105,6 +105,10 @@ func PostWebhook(webhook string, address string, dashboard Dashboard, payouts Pa
 						"value":  fmt.Sprintf("`%.1f MH/s`", HashrateToMhs(dashboard.Data.CurrentStatistics.ReportedHashrate)),
 						"inline": true,
 					},
+					{
+						"name": fmt.Sprintf("> data from <t:%d:R>", dashboard.Data.CurrentStatistics.Time),
+						"value": fmt.Sprintf("> <t:%d>", dashboard.Data.CurrentStatistics.Time),
+					},
 				},
 			},
 		},
