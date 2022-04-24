@@ -23,9 +23,16 @@ func main() {
 
 	flag.Parse()
 
-	address := flag.Arg(0)
+	address := flag.Arg(1)
 
 	if address == "" {
+		fmt.Println("no address given")
+		os.Exit(0)
+	}
+
+	webhook := flag.Arg(0)
+
+	if webhook == "" {
 		fmt.Println("no address given")
 		os.Exit(0)
 	}
@@ -57,10 +64,10 @@ func main() {
 
 		body := GetGraph(dashboard)
 
-		PostWebhook(address, dashboard, payouts, poolStats, body)
+		PostWebhook(webhook, address, dashboard, payouts, poolStats, body)
+		fmt.Println(webhook)
 
 		time.Sleep(time.Duration(interval) * time.Minute)
-
 	}
 
 }

@@ -40,7 +40,7 @@ func AverageHashrate(dashboard Dashboard) float64 {
 	return total / float64(len(dashboard.Data.Statistics))
 }
 
-func PostWebhook(address string, dashboard Dashboard, payouts Payouts, poolStats PoolStats, imgReader *bytes.Reader) {
+func PostWebhook(webhook string, address string, dashboard Dashboard, payouts Payouts, poolStats PoolStats, imgReader *bytes.Reader) {
 
 	whc := WebhookContent{
 		Embeds: []Embeds{
@@ -113,7 +113,7 @@ func PostWebhook(address string, dashboard Dashboard, payouts Payouts, poolStats
 	b, _ := json.Marshal(whc)
 
 	req, err := newfileUploadRequest(
-		"https://discord.com/api/webhooks/820711573907570718/UjHhU8AMhb3ym9yGq1kyED8EHH-XJ05-ms2sqOMWD7TVR94fOuK4AbY7HqV8BPEBC1Z6",
+		webhook,
 		"image",
 		imgReader,
 		string(b),

@@ -82,45 +82,50 @@ func GetGraph(dashboard Dashboard) *bytes.Reader {
 
 type Dashboard struct {
 	Status string `json:"status"`
-	Data   struct {
-		Statistics []struct {
-			Time             float64 `json:"time"`
-			LastSeen         float64 `json:"lastSeen"`
-			ReportedHashrate float64 `json:"reportedHashrate"`
-			CurrentHashrate  float64 `json:"currentHashrate"`
-			ValidShares      int64   `json:"validShares"`
-			InvalidShares    int64   `json:"invalidShares"`
-			StaleShares      int64   `json:"staleShares"`
-			ActiveWorkers    int64   `json:"activeWorkers"`
-		} `json:"statistics"`
-		Workers []struct {
-			Worker           string  `json:"worker"`
-			Time             float64 `json:"time"`
-			LastSeen         float64 `json:"lastSeen"`
-			ReportedHashrate float64 `json:"reportedHashrate"`
-			CurrentHashrate  float64 `json:"currentHashrate"`
-			ValidShares      float64 `json:"validShares"`
-			InvalidShares    float64 `json:"invalidShares"`
-			StaleShares      float64 `json:"staleShares"`
-		} `json:"workers"`
-		CurrentStatistics struct {
-			Time             float64 `json:"time"`
-			LastSeen         float64 `json:"lastSeen"`
-			ReportedHashrate float64 `json:"reportedHashrate"`
-			CurrentHashrate  float64 `json:"currentHashrate"`
-			ValidShares      int64   `json:"validShares"`
-			InvalidShares    int64   `json:"invalidShares"`
-			StaleShares      int64   `json:"staleShares"`
-			ActiveWorkers    int64   `json:"activeWorkers"`
-			Unpaid           float64 `json:"unpaid"`
-		} `json:"currentStatistics"`
-		Settings struct {
-			Email     string  `json:"email"`
-			Monitor   float64 `json:"monitor"`
-			MinPayout float64 `json:"minPayout"`
-			Suspended float64 `json:"suspended"`
-		} `json:"settings"`
-	} `json:"data"`
+	Data   Data   `json:"data"`
+}
+type Statistics struct {
+	Time             int64   `json:"time"`
+	LastSeen         int64   `json:"lastSeen"`
+	ReportedHashrate float64 `json:"reportedHashrate"`
+	CurrentHashrate  float64 `json:"currentHashrate"`
+	ValidShares      int64   `json:"validShares"`
+	InvalidShares    int64   `json:"invalidShares"`
+	StaleShares      int64   `json:"staleShares"`
+	ActiveWorkers    int64   `json:"activeWorkers"`
+}
+type Workers struct {
+	Worker           string  `json:"worker"`
+	Time             int64   `json:"time"`
+	LastSeen         int64   `json:"lastSeen"`
+	ReportedHashrate float64 `json:"reportedHashrate"`
+	CurrentHashrate  float64 `json:"currentHashrate"`
+	ValidShares      int64   `json:"validShares"`
+	InvalidShares    int64   `json:"invalidShares"`
+	StaleShares      int64   `json:"staleShares"`
+}
+type CurrentStatistics struct {
+	Time             int64   `json:"time"`
+	LastSeen         int64   `json:"lastSeen"`
+	ReportedHashrate float64 `json:"reportedHashrate"`
+	CurrentHashrate  float64 `json:"currentHashrate"`
+	ValidShares      int64   `json:"validShares"`
+	InvalidShares    int64   `json:"invalidShares"`
+	StaleShares      int64   `json:"staleShares"`
+	ActiveWorkers    int64   `json:"activeWorkers"`
+	Unpaid           float64 `json:"unpaid"`
+}
+type Settings struct {
+	Email     string  `json:"email"`
+	Monitor   int64   `json:"monitor"`
+	MinPayout float64 `json:"minPayout"`
+	Suspended int64   `json:"suspended"`
+}
+type Data struct {
+	Statistics        []Statistics      `json:"statistics"`
+	Workers           []Workers         `json:"workers"`
+	CurrentStatistics CurrentStatistics `json:"currentStatistics"`
+	Settings          Settings          `json:"settings"`
 }
 
 func GetDashboard(address string) (Dashboard, error) {
