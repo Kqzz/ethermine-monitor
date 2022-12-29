@@ -1,7 +1,6 @@
 # Ethermine Monitor
 
 > ⚠ no longer functional, as ethereum has transitioned to etherum 2.0 and mining has been phased out
-> Made by Kqzz
 
 ## Usage
 `./ethermine-monitor -interval [interval] <webhook> <eth-address>`
